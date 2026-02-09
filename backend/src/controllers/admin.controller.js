@@ -1,5 +1,6 @@
 import Exam from "../models/Exam.model.js";
 import Question from "../models/Question.model.js";
+import Result from "../models/Result.model.js";
 
 export const createExam = async (req, res) => {
   try {
@@ -39,4 +40,11 @@ export const publishExam = async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
+};
+
+export const getExamResults = async (req, res) => {
+  const results = await Result.find({ exam: req.params.examId })
+    .populate("student", "name email");
+
+  res.json(results);
 };
