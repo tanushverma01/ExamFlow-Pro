@@ -1,6 +1,10 @@
+import PublicNavbar from "../components/PublicNavbar";
+
 export default function Contact() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:py-12">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-sky-50 to-indigo-50 flex flex-col">
+      <PublicNavbar />
+      <div className="mx-auto max-w-3xl px-4 py-10 sm:py-12 flex-1">
       <div className="mb-6">
         <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
           Contact
@@ -53,6 +57,7 @@ export default function Contact() {
             Submit (UI only)
           </button>
         </form>
+      </div>
       </div>
     </div>
   );

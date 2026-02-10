@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
+import PublicNavbar from "../components/PublicNavbar";
 
 export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-[calc(100vh-5rem)] bg-gradient-to-br from-slate-50 via-sky-50 to-indigo-50">
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-12 sm:py-16 lg:flex-row lg:items-center lg:justify-between">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-sky-50 to-indigo-50 flex flex-col">
+      <PublicNavbar />
+      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-4 py-10 sm:py-16 lg:flex-row lg:items-center lg:justify-between">
         <div className="max-w-xl">
           <span className="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-100">
             New · ExamFlow Pro
@@ -25,7 +27,7 @@ export default function Home() {
 
           <div className="mt-6 flex flex-wrap gap-3">
             <button
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/login")}
               className="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 transition"
             >
               Login

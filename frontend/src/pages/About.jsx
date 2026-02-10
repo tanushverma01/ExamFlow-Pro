@@ -1,6 +1,10 @@
+import PublicNavbar from "../components/PublicNavbar";
+
 export default function About() {
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:py-12">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-sky-50 to-indigo-50 flex flex-col">
+      <PublicNavbar />
+      <div className="mx-auto max-w-4xl px-4 py-10 sm:py-12 flex-1">
       <div className="mb-8">
         <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
           About ExamFlow Pro
@@ -73,6 +77,7 @@ export default function About() {
           the current experience.
         </p>
       </section>
+      </div>
     </div>
   );
 }

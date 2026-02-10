@@ -16,7 +16,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/phases" element={<Phases />} />
@@ -69,7 +70,7 @@ export default function App() {
         />
 
         {/* Catch all */}
-        <Route path="*" element={<Login />} />
+        <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );

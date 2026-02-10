@@ -40,34 +40,6 @@ export default function MainLayout({ children }) {
           <nav className="hidden items-center gap-4 text-xs font-medium text-slate-600 sm:flex">
             <button
               type="button"
-              onClick={() => navigate("/home")}
-              className="rounded-full px-3 py-1 hover:bg-slate-100 hover:text-slate-900 transition"
-            >
-              Home
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/about")}
-              className="rounded-full px-3 py-1 hover:bg-slate-100 hover:text-slate-900 transition"
-            >
-              About
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/phases")}
-              className="rounded-full px-3 py-1 hover:bg-slate-100 hover:text-slate-900 transition"
-            >
-              Phases
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/contact")}
-              className="rounded-full px-3 py-1 hover:bg-slate-100 hover:text-slate-900 transition"
-            >
-              Contact
-            </button>
-            <button
-              type="button"
               onClick={goToDashboard}
               className="rounded-full px-3 py-1 text-slate-900 hover:bg-slate-100 transition"
             >
@@ -89,7 +61,7 @@ export default function MainLayout({ children }) {
             <button
               onClick={() => {
                 logout();
-                navigate("/");
+                navigate("/login");
               }}
               className="inline-flex items-center rounded-full border border-red-100 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 shadow-sm hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 transition"
             >
