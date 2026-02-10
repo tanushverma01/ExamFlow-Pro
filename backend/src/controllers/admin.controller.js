@@ -28,6 +28,19 @@ export const addQuestion = async (req, res) => {
   }
 };
 
+export const addMultipleQuestions = async (req, res) => {
+  const { examId, questions } = req.body;
+
+  const formatted = questions.map((q) => ({
+    ...q,
+    exam: examId,
+  }));
+
+  await Question.insertMany(formatted);
+
+  res.json({ message: "Questions added successfully" });
+};
+
 export const publishExam = async (req, res) => {
   try {
     const exam = await Exam.findByIdAndUpdate(

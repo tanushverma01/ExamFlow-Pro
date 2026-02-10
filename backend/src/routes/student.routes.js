@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get("/exams", protect, getPublishedExams);
 router.get("/exams/:examId/questions", protect, getExamQuestions);
-router.post("/submit",protect,submitExam);
+router.post("/submit", protect, submitExam);
 router.get("/results", protect, getMyResults);
 
 
