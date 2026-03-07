@@ -5,12 +5,10 @@ import { AuthContext } from "../context/AuthContext";
 export default function ProtectedRoute({ children, role }) {
   const { user } = useContext(AuthContext);
 
-  // 🚨 NOT LOGGED IN
   if (!user) {
     return <Navigate to="/" replace />;
   }
 
-  // 🚨 WRONG ROLE
   if (role && user.role !== role) {
     return <Navigate to="/" replace />;
   }
