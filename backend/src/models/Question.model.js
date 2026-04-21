@@ -1,34 +1,36 @@
 import mongoose from "mongoose";
 
-const questionSchema = new mongoose.Schema(
-  {
-    exam: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Exam",
-      required: true,
-    },
-
-    text: {
-      type: String,
-      required: true,
-    },
-
-    options: {
-      type: [String],
-      required: true,
-    },
-
-    correctAnswer: {
-      type: Number,
-      required: true,
-    },
-
-    marks: {
-      type: Number,
-      default: 1,
-    },
+const questionSchema = new mongoose.Schema({
+  exam: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Exam",
   },
-  { timestamps: true }
-);
+
+  type: {
+    type: String,
+    enum: ["mcq", "coding"],
+    default: "mcq",
+  },
+
+  // MCQ fields
+  text: String,
+  options: [String],
+  correctAnswer: Number,
+
+  // Coding fields
+  title: String,
+  description: String,
+  testCases: [
+    {
+      input: String,
+      output: String,
+    },
+  ],
+
+  marks: {
+    type: Number,
+    default: 1,
+  },
+});
 
 export default mongoose.model("Question", questionSchema);

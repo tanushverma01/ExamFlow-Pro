@@ -8,12 +8,42 @@ export default function ExamAttempt() {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [result, setResult] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(null);
 
   useEffect(() => {
-    api.get(`/student/exams/${id}/questions`).then((res) => {
-      setQuestions(res.data);
-    });
-  }, [id]);
+  const fetchData = async () => {
+    const resQ = await api.get(`/student/exams/${id}/questions`);
+    setQuestions(resQ.data);
+
+    const resExam = await api.get(`/student/exams`);
+    const exam = resExam.data.find((e) => e._id === id);
+
+    if (exam) {
+      setTimeLeft(exam.duration * 60); // seconds
+    }
+  };
+
+  fetchData();
+}, [id]);
+useEffect(() => {
+  if (timeLeft === null) return;
+
+  if (timeLeft <= 0) {
+    submitExam();
+    return;
+  }
+
+  const timer = setInterval(() => {
+    setTimeLeft((prev) => prev - 1);
+  }, 1000);
+
+  return () => clearInterval(timer);
+}, [timeLeft]);
+const formatTime = (t) => {
+  const m = Math.floor(t / 60);
+  const s = t % 60;
+  return `${m}:${s < 10 ? "0" : ""}${s}`;
+};
 
   const selectAnswer = (qid, selected) => {
     setAnswers((prev) => {
@@ -64,46 +94,56 @@ export default function ExamAttempt() {
         ) : (
           <>
             <div className="sticky top-0 z-10 -mx-4 mb-4 border-b border-slate-100 bg-slate-50/70 px-4 py-3 backdrop-blur">
-              <h1 className="text-xl font-semibold text-slate-900">
-                Exam
-              </h1>
+              <div className="flex justify-between items-center mb-6">
+  <h1 className="text-2xl font-bold">Exam</h1>
+
+  {timeLeft !== null && (
+    <div className="bg-red-100 text-red-600 px-4 py-2 rounded font-semibold">
+      Time Left: {formatTime(timeLeft)}
+    </div>
+  )}
+</div>
               <p className="mt-1 text-xs text-slate-600">
                 Read each question carefully and choose the best answer.
               </p>
             </div>
+{questions.map((q, index) => (
+  <div key={q._id} className="mb-6 bg-white p-4 rounded shadow">
+    
+    {q.type === "mcq" && (
+      <>
+        <p>{index + 1}. {q.text}</p>
 
-            {questions.map((q, index) => (
-              <div
-                key={q._id}
-                className="mb-5 rounded-2xl border border-slate-100 bg-white/80 p-5 shadow-sm"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-600">
-                    {index + 1}
-                  </div>
-                  <p className="font-medium text-slate-900">
-                    {q.text}
-                  </p>
-                </div>
+        {q.options.map((opt, idx) => (
+          <label key={idx}>
+            <input
+              type="radio"
+              name={q._id}
+              onChange={() => selectAnswer(q._id, idx)}
+            />
+            {opt}
+          </label>
+        ))}
+      </>
+    )}
 
-                <div className="mt-4 space-y-2">
-                  {q.options.map((opt, idx) => (
-                    <label
-                      key={idx}
-                      className="flex items-center gap-3 rounded-lg border border-transparent px-3 py-2 text-sm text-slate-700 hover:border-indigo-100 hover:bg-indigo-50/60 cursor-pointer transition"
-                    >
-                      <input
-                        type="radio"
-                        name={q._id}
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300"
-                        onChange={() => selectAnswer(q._id, idx)}
-                      />
-                      <span>{opt}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            ))}
+    {q.type === "coding" && (
+      <>
+        <h2 className="font-bold">{q.title}</h2>
+        <p className="text-sm text-gray-600">{q.description}</p>
+
+        <textarea
+          placeholder="Write your code here..."
+          className="border p-2 w-full mt-3 h-32"
+          onChange={(e) =>
+            selectAnswer(q._id, e.target.value)
+          }
+        />
+      </>
+    )}
+
+  </div>
+))}
 
             <div className="sticky bottom-0 -mx-4 border-t border-slate-100 bg-white/80 px-4 py-3 backdrop-blur">
               <div className="flex justify-end">

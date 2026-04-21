@@ -19,14 +19,26 @@ export const submitExam = async (req, res) => {
 
     let score = 0;
 
-    for (const a of answers) {
-      const question = await Question.findById(a.questionId);
-      if (!question) continue;
+for (const a of answers) {
+  const question = await Question.findById(a.questionId);
+  if (!question) continue;
 
-      if (question.correctAnswer === a.answer) {
-        score += question.marks;
-      }
+  // MCQ
+  if (question.type === "mcq") {
+    if (question.correctAnswer === a.answer) {
+      score += question.marks;
     }
+  }
+
+  // CODING
+  if (question.type === "coding") {
+    const passed = runCode(a.answer, question.testCases);
+
+    if (passed === question.testCases.length) {
+      score += question.marks;
+    }
+  }
+}
 
     const result = await Result.create({
       student: userId,
@@ -41,6 +53,28 @@ export const submitExam = async (req, res) => {
   } catch (err) {
     console.error("SUBMIT ERROR:", err);
     res.status(500).json({ message: "Submission failed" });
+  }
+};
+const runCode = (code, testCases) => {
+  let passed = 0;
+
+  try {
+    const func = new Function(code + "; return solve;")();
+
+    for (const tc of testCases) {
+      const input = tc.input.split(" ").map(Number);
+      const expected = tc.output;
+
+      const result = func(...input);
+
+      if (String(result) === String(expected)) {
+        passed++;
+      }
+    }
+
+    return passed;
+  } catch (err) {
+    return 0;
   }
 };
 export const getPublishedExams = async (req, res) => {
